@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiny Calc</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #0F1220; font-family: system-ui, sans-serif; }
+  .calc { width: 280px; padding: 16px; border-radius: 20px; background: #171B2D; }
+  #out { height: 56px; margin-bottom: 12px; padding: 0 12px; border-radius: 12px; background: #0B0E19; color: #E9E7F2; font: 28px ui-monospace, monospace; text-align: right; line-height: 56px; overflow: hidden; }
+  .keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  button { height: 56px; border: 0; border-radius: 12px; background: #272C45; color: #E9E7F2; font-size: 20px; cursor: pointer; }
+  button.op { background: #F4B740; color: #231A04; }
+</style>
+</head>
+<body>
+<div class="calc">
+  <div id="out">0</div>
+  <div class="keys">
+    <button>7</button><button>8</button><button>9</button><button class="op">/</button>
+    <button>4</button><button>5</button><button>6</button><button class="op">*</button>
+    <button>1</button><button>2</button><button>3</button><button class="op">-</button>
+    <button>C</button><button>0</button><button class="op">=</button><button class="op">+</button>
+  </div>
+</div>
+<script>
+  const out = document.getElementById('out');
+  let expr = '';
+  document.querySelector('.keys').onclick = (e) => {
+    const k = e.target.textContent;
+    if (e.target.tagName !== 'BUTTON') return;
+    if (k === 'C') expr = '';
+    else if (k === '=') {
+      // only digits and + - * / . reach the calculation
+      expr = /^[\d+\-*/.]+$/.test(expr) ? String(Function('return ' + expr)()) : '';
+    } else expr += k;
+    out.textContent = expr || '0';
+  };
+</script>
+</body>
+</html>
